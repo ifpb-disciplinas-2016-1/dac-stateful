@@ -3,6 +3,8 @@ package ifpb.dac.controlador;
 import ifpb.dac.service.Carrinho;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -25,16 +27,21 @@ public class Controlador implements Serializable {
     private Carrinho carrinho;
 
     public Controlador() {
+        produtos= new ArrayList<>();
     }
 
     public String add() {
         carrinho.add(produto);
+//        produtos.add(produto);// = carrinho.listaDeProdutos();
         produto = new String();
+        
+        produtos = carrinho.listaDeProdutos();
         return null;
     }
 
     public String finalizar() {
         carrinho.finalizar();
+        produtos = new ArrayList<>();
         logout();
         return null;
     }
@@ -50,9 +57,12 @@ public class Controlador implements Serializable {
     public String logout() {
         //Redireciona o usuário para tela de login efetuando o logout.  
         String loginPage = "/index.jsf";
-        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
-        HttpServletRequest request = (HttpServletRequest) context.getRequest();
-        HttpSession session = (HttpSession) context.getSession(false);
+        ExternalContext context = FacesContext.getCurrentInstance().
+                getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) context.
+                getRequest();
+        HttpSession session = (HttpSession) context.
+                getSession(false);
         session.invalidate();
         try {
             context.redirect(request.getContextPath() + loginPage);
@@ -62,5 +72,19 @@ public class Controlador implements Serializable {
 
         return null;
     }
+
+    private List<String> produtos;
+
+    public List<String> getProdutos() {
+//        System.out.println("Essa lista está invocada: "+produtos.size());
+        return produtos;
+    }
+    
+    public String removerProduto(String p){
+        carrinho.del(p);
+        produtos = carrinho.listaDeProdutos();
+        return null;
+    }
+ 
 
 }
