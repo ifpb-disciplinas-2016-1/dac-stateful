@@ -1,7 +1,6 @@
 package ifpb.dac.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.ArrayList; 
 import java.util.List;
 import javax.ejb.Remote;
 import javax.ejb.Remove;
